@@ -55,7 +55,8 @@ public class PostsController {
     }
 
     @GetMapping("/get_all_posts")
-    public ResponseEntity<Page<Posts>> getAllPosts(@RequestBody PageRequestDto pageRequestDto) {
+    public ResponseEntity<Page<Posts>> getAllPosts(@RequestBody PageRequestDto pageRequestDto)
+            throws UserDefinedException {
         Pageable pageable = pageRequestDto.getPageable(pageRequestDto);
         return postsService.getAllPosts(pageable);
     }

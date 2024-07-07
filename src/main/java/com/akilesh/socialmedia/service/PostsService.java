@@ -6,13 +6,17 @@ import java.util.Optional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.akilesh.socialmedia.common.exceptions.UserDefinedException;
-import com.akilesh.socialmedia.common.exceptions.advice.RestExceptionHandling;
+import com.akilesh.socialmedia.dto.PageRequestDto;
 import com.akilesh.socialmedia.entity.Posts;
 import com.akilesh.socialmedia.model.requestModel.PostsRequestModel;
 import com.akilesh.socialmedia.repository.PostsRepository;
@@ -24,17 +28,17 @@ import com.akilesh.socialmedia.repository.PostsRepository;
 @Service
 public class PostsService {
 
-    private static final Log logger = LogFactory.getLog(RestExceptionHandling.class);
+    private static final Log logger = LogFactory.getLog(PostsService.class);
 
     @Autowired
     private PostsRepository postsRepository;
 
-    public ResponseEntity<Page<Posts>> getAllPosts(Pageable pageable) {
+    public ResponseEntity<Page<Posts>> getAllPosts(Pageable pageable) throws UserDefinedException {
         try {
             return ResponseEntity.ok(postsRepository.findAll(pageable));
         } catch (Exception ex) {
             logger.error(ex);
-            throw new RuntimeException(ex);
+            throw new UserDefinedException(ex.getMessage());
         }
     }
 
@@ -62,16 +66,17 @@ public class PostsService {
     }
 
     public ResponseEntity<Posts> findPostsById(Long id) {
-        return ResponseEntity.ok(postsRepository.findById(id).get());
+        return ResponseEntity.ok(postsRepository.findById(id).orElseThrow());
     }
 
-    public ResponseEntity<?> deletePost(Long postId) {
+    public ResponseEntity<String> deletePost(Long postId) {
         postsRepository.deleteById(postId);
         return ResponseEntity.ok("Successfully deleted post");
     }
 
 
-/*    public Page<Posts> getAllListPosts(PageRequestDto pageRequestDto) {
+    //This Function is to Construct Pagination in Service with list of Values retried from DB
+    public Page<Posts> getAllListPosts(PageRequestDto pageRequestDto) {
         List<Posts> posts = postsRepository.findAll();
 
         PagedListHolder<Posts> pagedListHolder= new PagedListHolder<>(posts);
@@ -80,10 +85,8 @@ public class PostsService {
 
         List<Posts> pageSlice = pagedListHolder.getPageList();
         PropertyComparator.sort(pageSlice,new MutableSortDefinition("id",true,false));
-
-        Page<Posts> pagedData = new PageImpl<>(pageSlice,
+        return new PageImpl<>(pageSlice,
                 new PageRequestDto().getPageable(pageRequestDto),
                 posts.size());
-        return pagedData;
-    }*/
+    }
 }
