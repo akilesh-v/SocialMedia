@@ -1,5 +1,7 @@
 package com.akilesh.socialmedia.entity;
 
+import java.io.Serializable;
+
 import com.akilesh.socialmedia.model.requestModel.UserRequestModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Users {
+public class Users implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
