@@ -33,13 +33,14 @@ public class RestExceptionHandling {
     public static final String LOG_TAG = "[SOCIALMEDIA]";
 
     public static final String MESSAGE = "Encountered error while processing request";
+    public static final String EX_MESSAGE = "message";
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public Map<String, String> resourceNotFound(ResourceNotFoundException ex) {
         logger.error(String.format("%s : ResourceNotFound exception:", LOG_TAG), ex);
-        return Collections.singletonMap("message", ex.getMessage());
+        return Collections.singletonMap(RestExceptionHandling.MESSAGE, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -47,7 +48,7 @@ public class RestExceptionHandling {
     @ResponseBody
     public Map<String, String> resourceNotFound(MethodArgumentNotValidException ex) {
         logger.error(String.format("%s : MethodArgumentNotValid exception:", LOG_TAG), ex);
-        return Collections.singletonMap("message", ex.getMessage());
+        return Collections.singletonMap(EX_MESSAGE, ex.getMessage());
     }
 
     @ExceptionHandler(ValidationException.class)
@@ -55,7 +56,7 @@ public class RestExceptionHandling {
     @ResponseBody
     public Map<String, String> validationException(ValidationException ex) {
         logger.error(String.format("%s : Validation exception:", LOG_TAG), ex);
-        return Collections.singletonMap("message", ex.getMessage());
+        return Collections.singletonMap(EX_MESSAGE, ex.getMessage());
     }
 
     @ExceptionHandler(ForbiddenException.class)
@@ -63,7 +64,7 @@ public class RestExceptionHandling {
     @ResponseBody
     public Map<String, Object> forbiddenException(ForbiddenException ex) {
         logger.error(String.format("%s : Forbidden exception:", LOG_TAG), ex);
-        return Collections.singletonMap("message", ex.getMessage());
+        return Collections.singletonMap(EX_MESSAGE, ex.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -71,7 +72,7 @@ public class RestExceptionHandling {
     @ResponseBody
     public Map<String, Object> runtimeError(Exception ex) {
         logger.fatal(String.format("%s : %s", LOG_TAG, MESSAGE), ex);
-        return Collections.singletonMap("message", ex.getMessage());
+        return Collections.singletonMap(EX_MESSAGE, ex.getMessage());
     }
 
     @ExceptionHandler(DataNotFoundException.class)
@@ -79,7 +80,7 @@ public class RestExceptionHandling {
     @ResponseBody
     public Map<String, Object> dataNotFound(DataNotFoundException ex) {
         logger.error(String.format("%s : Data Not found exception:", LOG_TAG), ex);
-        return Collections.singletonMap("message", "Data Not Found");
+        return Collections.singletonMap(EX_MESSAGE, "Data Not Found");
     }
 
     @ExceptionHandler(FailedDependencyException.class)
@@ -88,7 +89,7 @@ public class RestExceptionHandling {
     public Map<String, Object> failedDependency(FailedDependencyException ex) {
         final String message = "service is down. Please try after some time";
         logger.error(String.format("%s : Failed response from dependent service", LOG_TAG), ex);
-        return Collections.singletonMap("message", message);
+        return Collections.singletonMap(EX_MESSAGE, message);
     }
 
     @ExceptionHandler(CannotCreateTransactionException.class)
@@ -111,7 +112,7 @@ public class RestExceptionHandling {
         String errorMessage = ex.getMessage();
         logger.fatal(String.format("%s : %s", LOG_TAG, errorMessage), ex);
         Map<String, Object> errorMap = new HashMap<>();
-        errorMap.put("message", "Encountered error while processing request");
+        errorMap.put(EX_MESSAGE, MESSAGE);
         errorMap.put("error", errorMessage);
         return errorMap;
     }
