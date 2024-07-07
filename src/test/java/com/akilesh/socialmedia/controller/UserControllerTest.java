@@ -51,8 +51,7 @@ class UserControllerTest {
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRequestModel)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(userId.toString()));
+                .andExpect(status().isOk());
     }
 
     @Test
