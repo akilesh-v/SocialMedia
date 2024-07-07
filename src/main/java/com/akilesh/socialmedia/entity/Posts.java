@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,9 @@ public class Posts implements Serializable {
 
     @Column(name="no_of_comments")
     private int noOfComments;
+
+    @Version
+    private Long version;
 
     public Posts(PostsRequestModel postsRequestModel) {
         this.userId = postsRequestModel.getUserId();

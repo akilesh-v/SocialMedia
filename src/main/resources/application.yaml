@@ -6,6 +6,12 @@ spring:
     url: jdbc:postgresql://localhost/socialmedia
   application:
     name: socialmedia
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
   security:
     oauth2:
