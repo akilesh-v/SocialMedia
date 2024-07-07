@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,20 +27,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author AkileshVasudevan
  */
-public class PostsControllerTest {
+@WebMvcTest(PostsController.class)
+class PostsControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private PostsService postsService;
 
-    private PostsRequestModel postsRequestModel;
     private Posts post;
 
 
     @BeforeEach
     void setUp() {
-        postsRequestModel = new PostsRequestModel(1L, 1L, "Test post", 50000, 10000);
+        PostsRequestModel postsRequestModel = new PostsRequestModel(1L, 1L, "Test post", 50000, 10000);
         post = new Posts(postsRequestModel);
         post.setId(1L);
     }
