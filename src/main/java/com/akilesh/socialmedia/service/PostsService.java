@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -44,13 +42,11 @@ public class PostsService {
         return ResponseEntity.ok(postsRepository.findByNoOfLikesGreaterThan(noOfLikes, pageable));
     }
 
-    @CacheEvict(value = "posts", allEntries = true)
     public ResponseEntity<Posts> createPost(PostsRequestModel postModel) {
         Posts post = new Posts(postModel);
         return ResponseEntity.ok(postsRepository.save(post));
     }
 
-    @CacheEvict(value = "posts", allEntries = true)
     public ResponseEntity<Posts> updatePost(PostsRequestModel postModel) throws UserDefinedException {
         Optional<Posts> existingPosts = postsRepository.findById(postModel.getPostId());
         if (existingPosts.isPresent()) {
