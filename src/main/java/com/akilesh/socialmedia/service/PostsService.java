@@ -35,7 +35,6 @@ public class PostsService {
     @Autowired
     private RedisTemplate<String, Posts> redisTemplate;
 
-    @Cacheable(value = "posts", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public ResponseEntity<Page<Posts>> getAllPosts(Pageable pageable) {
         try {
             return ResponseEntity.ok(postsRepository.findAll(pageable));
@@ -49,7 +48,6 @@ public class PostsService {
         return ResponseEntity.ok(postsRepository.findByNoOfLikesGreaterThan(noOfLikes, pageable));
     }
 
-    @CachePut(value = "posts", key = "#post.id")
     public ResponseEntity<Posts> createPost(PostsRequestModel postModel) {
         Posts post = new Posts(postModel);
         return ResponseEntity.ok(postsRepository.save(post));
