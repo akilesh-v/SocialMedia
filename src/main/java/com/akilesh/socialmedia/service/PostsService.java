@@ -31,7 +31,6 @@ public class PostsService {
     @Autowired
     private PostsRepository postsRepository;
 
-    @Cacheable(value = "posts", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public ResponseEntity<Page<Posts>> getAllPosts(Pageable pageable) {
         try {
             return ResponseEntity.ok(postsRepository.findAll(pageable));
@@ -66,12 +65,10 @@ public class PostsService {
         }
     }
 
-    @Cacheable(value = "posts", key = "#id")
     public ResponseEntity<Posts> findPostsById(Long id) {
         return ResponseEntity.ok(postsRepository.findById(id).get());
     }
 
-    @CacheEvict(value = "order", key = "#id")
     public ResponseEntity<?> deletePost(Long postId) {
         postsRepository.deleteById(postId);
         return ResponseEntity.ok("Successfully deleted post");
